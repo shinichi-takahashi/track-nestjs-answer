@@ -1,0 +1,21 @@
+service: track
+provider:
+  name: aws
+  runtime: nodejs8.10
+  region: ${env:AWS_REGION}
+  memorySize: 256
+  timeout: 30
+  stage: ${opt:stage, 'dev'}
+plugins:
+- serverless-plugin-typescript
+- serverless-offline
+
+functions:
+  api:
+    handler: src/entry.handler
+    memorySize: 1024
+    events:
+    - http:
+        path: "{proxy+}"
+        method: any
+        cors: true
